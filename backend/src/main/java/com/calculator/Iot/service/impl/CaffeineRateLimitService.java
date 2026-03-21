@@ -36,7 +36,7 @@ public class CaffeineRateLimitService implements RateLimitService {
 
     public CaffeineRateLimitService() {
         this.expirationCache = Caffeine.newBuilder()
-                .expireAfter(Duration.ofMinutes(30)) // margem maior que o período máximo esperado
+                .expireAfterWrite(Duration.ofMinutes(30)) // margem maior que o período máximo esperado
                 .maximumSize(10_000)
                 .build();
     }
