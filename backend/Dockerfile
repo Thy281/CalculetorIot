@@ -15,12 +15,9 @@ RUN ./mvnw -B -DskipTests package
 FROM eclipse-temurin:21-jre
 WORKDIR /app
 
-# Runtime configuration via env vars
-ENV SPRING_PROFILES_ACTIVE=default \
-    SPRING_DATASOURCE_URL= \
-    SPRING_DATASOURCE_USERNAME= \
-    SPRING_DATASOURCE_PASSWORD= \
-    GROQ_API_KEY=
+# The application reads configuration from environment variables at runtime.
+# Do NOT set sensitive values (passwords, API keys) in the Dockerfile.
+# Pass them via docker run -e or docker-compose environment section.
 
 COPY --from=build /app/target/*.jar /app/app.jar
 EXPOSE 8080
