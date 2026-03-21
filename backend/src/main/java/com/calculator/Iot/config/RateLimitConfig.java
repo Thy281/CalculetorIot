@@ -7,10 +7,10 @@ import com.calculator.Iot.service.impl.RedisRateLimitService;
 import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.*;
+import org.springframework.boot.web.servlet.server.FilterRegistrationBean;
 import org.springframework.context.annotation.*;
+import org.springframework.core.Ordered;
 import org.springframework.data.redis.core.RedisTemplate;
-
-import java.util.Collections;
 
 /**
  * Configuração do Rate Limiting.
