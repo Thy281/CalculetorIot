@@ -1,0 +1,10 @@
+target/
+**/target/
+**/*.iml
+.git
+.github
+node_modules/
+frontend/
+.idea/
+.DS_Store
+
