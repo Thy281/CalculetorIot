@@ -46,13 +46,20 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      - name: Prepare image list
+        id: image-list
+        run: |
+          IMAGES="${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}"
+          if [ -n "${{ secrets.DOCKER_USERNAME }}" ]; then
+            IMAGES="$IMAGES ${{ secrets.DOCKER_USERNAME }}/calculator-iot"
+          fi
+          echo "images=$IMAGES" >> $GITHUB_OUTPUT
+
       - name: Extract metadata (tags, labels)
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-            ${{ secrets.DOCKER_USERNAME }}/calculator-iot
+          images: ${{ steps.image-list.outputs.images }}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
