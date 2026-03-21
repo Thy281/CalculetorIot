@@ -7,9 +7,12 @@
 ```bash
 cp .env.example .env
 # Edite o arquivo .env com seus valores:
-# - GROQ_API_KEY: sua chave da API Groq
-# - POSTGRES_PASSWORD: senha do PostgreSQL ( padrão: postgres )
+# - GROQ_API_KEY: sua chave da API Groq (obrigatória)
+# - POSTGRES_PASSWORD: senha do PostgreSQL (padrão: postgres)
+# - (Opcional) SPRING_REDIS_HOST/PORT - se quiser usar Redis externo
 ```
+
+**Nota:** O Redis já está incluso no docker-compose. Se quiser usar Redis externo, comente o serviço `redis` no docker-compose.yml e configure `SPRING_REDIS_HOST`.
 
 ### 2. Usar imagem do GHCR (recomendado)
 
@@ -43,6 +46,7 @@ docker-compose up -d
 # Ver logs
 docker-compose logs -f backend
 docker-compose logs -f postgres
+docker-compose logs -f redis
 
 # Parar tudo
 docker-compose down
@@ -192,6 +196,11 @@ docker stats
 # Ver IP dos containers
 docker-compose exec backend hostname -i
 docker-compose exec postgres hostname -i
+docker-compose exec redis redis-cli ping
+
+# Acessar Redis CLI
+docker-compose exec redis redis-cli
+# Dentro do CLI: KEYS ratelimit:* para ver chaves ativas
 ```
 
 ---
@@ -199,17 +208,20 @@ docker-compose exec postgres hostname -i
 ## 🏗️ Estrutura dos serviços
 
 ```
-┌─────────────────┐        ┌─────────────────┐
-│   Postgres      │:5432   │   Backend       │:8080
-│   ( alpine )    │───────▶│   (Java 21)     │
-│                 │        │                 │
-│  DB: calculetoriot      │  Spring Boot    │
-│  User: postgres          │  App            │
-└─────────────────┘        └─────────────────┘
-        ▲                          │
-        │                          │ healthcheck
-        └─────── depends_on ────────┘
+┌─────────────────┐        ┌─────────────────┐        ┌─────────────────┐
+│   Postgres      │:5432   │   Backend       │:8080   │     Redis       │
+│   ( alpine )    │───────▶│   (Java 21)     │───────▶│   (rate limit)  │
+│                 │        │                 │        │   (Sliding     │
+│  DB: calculetoriot      │  Spring Boot    │        │   Window Log)   │
+│  User: postgres          │  App            │        └─────────────────┘
+└─────────────────┘        └─────────────────┘               ▲
+        ▲                          │                          │
+        │                          │ healthcheck             │ healthcheck
+        └─────── depends_on ────────┴─────────────────────────┘
 ```
+
+O Redis é usado para armazenar os registros de rate limiting de forma distribuída.
+Cada requisição armazena um timestamp no Redis Sorted Set, removido automaticamente após expirar.
 
 ---
 
