@@ -2,7 +2,8 @@
 // Handles all communication with the Spring Boot back-end.
 
 // Prefer same-origin API by default; allow override via window.API_BASE for custom hosts.
-const API_BASE = (window.API_BASE || (window.location.origin + "/api/calculations"));
+const API_BASE = (window.API_BASE || (window.location.origin + "/api"));
+const CONVERTER_BASE = API_BASE + "/converter";
 
 /**
  * POST /api/calculations — sends a calculation request.
@@ -67,6 +68,26 @@ async function postAiCalculation(question) {
     if (!response.ok) {
         const errorData = await response.text();
         throw new Error(errorData || "AI calculation failed");
+    }
+
+    return response.json();
+}
+
+/**
+ * POST /api/converter/convert — converts a number from one base to another.
+ * @param {{ value: string, fromBase: number, toBase: number }} payload
+ * @returns {Promise<{ originalValue: string, fromBase: number, convertedValue: string, toBase: number }>}
+ */
+async function postConvert(payload) {
+    const response = await fetch(CONVERTER_BASE + "/convert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(errorData || "Conversion failed");
     }
 
     return response.json();
