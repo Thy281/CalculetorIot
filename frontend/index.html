@@ -161,6 +161,74 @@
             </div>
         </section>
 
+        <!-- Ultrathink Base Converter Section -->
+        <section class="glow-border rounded-2xl bg-gray-900/70 border border-gray-800/50 backdrop-blur-sm overflow-hidden">
+
+            <!-- Card Header -->
+            <div class="px-6 py-4 border-b border-gray-800/50 flex items-center gap-2">
+                <div class="w-3 h-3 rounded-full bg-amber-500/30 border border-amber-500/50"></div>
+                <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Ultrathink Base Converter</span>
+                <span class="ml-2 text-[10px] px-2 py-0.5 rounded-full bg-amber-900/40 border border-amber-700/40 text-amber-400 font-semibold">Bases 2-36</span>
+            </div>
+
+            <div class="p-6 space-y-4">
+
+                <p class="text-xs text-gray-500">
+                    Convert any number between bases 2 and 36 instantly. Supports binary, octal, decimal, hexadecimal, and more.
+                </p>
+
+                <!-- Converter Input -->
+                <div class="space-y-3">
+                    <div class="flex gap-3 items-end">
+                        <div class="flex-1 space-y-1">
+                            <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">Value</label>
+                            <input
+                                id="conv-value"
+                                type="text"
+                                placeholder="e.g. FF, 1010, 777"
+                                class="mono w-full bg-gray-950/60 border border-gray-700/50 rounded-lg px-4 py-3 text-amber-300 placeholder-gray-600 text-sm transition-all"
+                                autocomplete="off"
+                            />
+                        </div>
+                        <div class="flex gap-2 items-center">
+                            <div class="space-y-1">
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">From</label>
+                                <select
+                                    id="conv-from-base"
+                                    class="bg-gray-950/60 border border-gray-700/50 rounded-lg px-3 py-3 text-sm text-gray-300 cursor-pointer transition-all"
+                                ></select>
+                            </div>
+                            <button
+                                id="conv-swap-bases"
+                                type="button"
+                                title="Swap bases"
+                                class="p-3 rounded-lg bg-gray-800/60 border border-gray-700/40 text-gray-400 hover:text-amber-400 hover:border-amber-500/40 transition-all"
+                            >
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/>
+                                </svg>
+                            </button>
+                            <div class="space-y-1">
+                                <label class="block text-xs font-semibold text-gray-400 uppercase tracking-wider">To</label>
+                                <select
+                                    id="conv-to-base"
+                                    class="bg-gray-950/60 border border-gray-700/50 rounded-lg px-3 py-3 text-sm text-gray-300 cursor-pointer transition-all"
+                                ></select>
+                            </div>
+                        </div>
+                    </div>
+                    <p id="conv-error" class="text-xs text-red-400 hidden">&nbsp;</p>
+                </div>
+
+                <!-- Converter Result -->
+                <div class="result-glow rounded-xl bg-gray-950/80 border border-amber-900/30 p-6">
+                    <p class="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-2">Converted Value</p>
+                    <p id="conv-result" class="mono text-4xl md:text-5xl font-bold text-amber-400 break-all">—</p>
+                </div>
+
+            </div>
+        </section>
+
         <!-- AI Smart Calculator Section -->
         <section class="glow-border rounded-2xl bg-gray-900/70 border border-gray-800/50 backdrop-blur-sm overflow-hidden">
 
@@ -291,6 +359,7 @@
     <script src="js/config.js?v=20260316"></script>
     <script src="js/api.js"></script>
     <script src="js/validation.js"></script>
+    <script src="js/converter.js"></script>
     <script src="js/ui.js"></script>
     <script src="js/serial.js?v=20260316"></script>
     <script src="js/speech.js"></script>

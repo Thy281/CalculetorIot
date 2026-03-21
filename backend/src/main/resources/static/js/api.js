@@ -11,7 +11,7 @@ const CONVERTER_BASE = API_BASE + "/converter";
  * @returns {Promise<object>} The saved Calculation entity from the server.
  */
 async function postCalculation(payload) {
-    const response = await fetch(API_BASE, {
+    const response = await fetch(API_BASE + "/calculations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -30,7 +30,7 @@ async function postCalculation(payload) {
  * @returns {Promise<object[]>} Array of Calculation entities.
  */
 async function fetchHistory() {
-    const response = await fetch(API_BASE + "/history");
+    const response = await fetch(API_BASE + "/calculations/history");
 
     if (!response.ok) {
         throw new Error("Failed to load history");
@@ -44,7 +44,7 @@ async function fetchHistory() {
  * @returns {Promise<void>}
  */
 async function deleteHistory() {
-    const response = await fetch(API_BASE + "/history", {
+    const response = await fetch(API_BASE + "/calculations/history", {
         method: "DELETE"
     });
 
@@ -59,7 +59,7 @@ async function deleteHistory() {
  * @returns {Promise<{ question: string, explanation: string }>}
  */
 async function postAiCalculation(question) {
-    const response = await fetch(API_BASE + "/ai", {
+    const response = await fetch(API_BASE + "/calculations/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question })
@@ -92,4 +92,3 @@ async function postConvert(payload) {
 
     return response.json();
 }
-

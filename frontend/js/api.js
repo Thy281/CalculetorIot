@@ -2,7 +2,8 @@
 // Handles all communication with the Spring Boot back-end.
 
 // Prefer same-origin API by default; allow override via window.API_BASE for custom hosts.
-const API_BASE = (window.API_BASE || (window.location.origin + "/api/calculations"));
+const API_BASE = (window.API_BASE || (window.location.origin + "/api"));
+const CONVERTER_BASE = API_BASE + "/converter";
 
 /**
  * POST /api/calculations — sends a calculation request.
@@ -10,7 +11,7 @@ const API_BASE = (window.API_BASE || (window.location.origin + "/api/calculation
  * @returns {Promise<object>} The saved Calculation entity from the server.
  */
 async function postCalculation(payload) {
-    const response = await fetch(API_BASE, {
+    const response = await fetch(API_BASE + "/calculations", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
@@ -29,7 +30,7 @@ async function postCalculation(payload) {
  * @returns {Promise<object[]>} Array of Calculation entities.
  */
 async function fetchHistory() {
-    const response = await fetch(API_BASE + "/history");
+    const response = await fetch(API_BASE + "/calculations/history");
 
     if (!response.ok) {
         throw new Error("Failed to load history");
@@ -43,7 +44,7 @@ async function fetchHistory() {
  * @returns {Promise<void>}
  */
 async function deleteHistory() {
-    const response = await fetch(API_BASE + "/history", {
+    const response = await fetch(API_BASE + "/calculations/history", {
         method: "DELETE"
     });
 
@@ -58,7 +59,7 @@ async function deleteHistory() {
  * @returns {Promise<{ question: string, explanation: string }>}
  */
 async function postAiCalculation(question) {
-    const response = await fetch(API_BASE + "/ai", {
+    const response = await fetch(API_BASE + "/calculations/ai", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ question })
@@ -67,6 +68,26 @@ async function postAiCalculation(question) {
     if (!response.ok) {
         const errorData = await response.text();
         throw new Error(errorData || "AI calculation failed");
+    }
+
+    return response.json();
+}
+
+/**
+ * POST /api/converter/convert — converts a number from one base to another.
+ * @param {{ value: string, fromBase: number, toBase: number }} payload
+ * @returns {Promise<{ originalValue: string, fromBase: number, convertedValue: string, toBase: number }>}
+ */
+async function postConvert(payload) {
+    const response = await fetch(CONVERTER_BASE + "/convert", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    });
+
+    if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(errorData || "Conversion failed");
     }
 
     return response.json();

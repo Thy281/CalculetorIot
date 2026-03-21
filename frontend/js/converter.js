@@ -91,7 +91,7 @@ async function performConversion() {
         const response = await postConvert({ value, fromBase, toBase });
         resultEl.textContent = response.convertedValue;
         resultEl.classList.remove("text-gray-500");
-        resultEl.classList.add("text-cyan-400");
+        resultEl.classList.add("text-amber-400");
     } catch (err) {
         errorEl.textContent = err.message || "Conversion failed";
         errorEl.classList.remove("hidden");
@@ -99,7 +99,7 @@ async function performConversion() {
     }
 }
 
-// Validate converter input (same logic as validation.js but for converter)
+// Validate converter input (same logic as validation.js but for converter section)
 function validateConverterInput(value, base) {
     if (!value) return true;
     const allowedChars = VALID_CHARS.substring(0, base);
@@ -107,6 +107,12 @@ function validateConverterInput(value, base) {
     if (invalidChars.length > 0) {
         const baseName = getBaseName(base);
         const maxDigit = getMaxDigit(base);
+        // Use the error element in the converter section
+        const errorEl = document.getElementById("conv-error");
+        if (errorEl) {
+            errorEl.textContent = `${baseName} accepts only digits 0-${maxDigit}`;
+            errorEl.classList.remove("hidden");
+        }
         showToast(`${baseName} accepts only digits 0-${maxDigit}`, "error");
         return false;
     }

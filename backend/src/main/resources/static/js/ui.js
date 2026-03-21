@@ -1,12 +1,22 @@
 // ── UI Module ────────────────────────────────────────────
 // Toast notifications and DOM helper utilities.
 
+/**
+ * Escapes a string for safe insertion into HTML.
+ * @param {string} str
+ * @returns {string}
+ */
 function escapeHtml(str) {
     const div = document.createElement("div");
     div.appendChild(document.createTextNode(str));
     return div.innerHTML;
 }
 
+/**
+ * Shows a temporary toast notification.
+ * @param {string} message - The message to display.
+ * @param {"success"|"error"} type - Visual style of the toast.
+ */
 function showToast(message, type) {
     const container = document.getElementById("toast-container");
     const colors = {
@@ -20,9 +30,16 @@ function showToast(message, type) {
     setTimeout(() => toast.remove(), 3000);
 }
 
+/** Base-name look-up for history table badges. */
 const BASE_NAME = { 2: "BIN", 8: "OCT", 10: "DEC", 16: "HEX" };
+
+/** Operator-symbol look-up for history table display. */
 const OP_SYMBOL = { "+": "+", "-": "−", "*": "×", "/": "÷" };
 
+/**
+ * Renders an array of Calculation rows into the history table body.
+ * @param {object[]} data - Array of Calculation entities from the API.
+ */
 function renderHistory(data) {
     const tbody = document.getElementById("history-body");
 
@@ -77,6 +94,9 @@ function renderHistory(data) {
         .join("");
 }
 
+/**
+ * Renders an error state in the history table.
+ */
 function renderHistoryError() {
     document.getElementById("history-body").innerHTML = `
         <tr>
@@ -86,6 +106,9 @@ function renderHistoryError() {
         </tr>`;
 }
 
+/**
+ * Shows the AI result panel in a loading state.
+ */
 function renderAiLoading() {
     const panel = document.getElementById("ai-result-panel");
     const content = document.getElementById("ai-result-content");
@@ -100,18 +123,28 @@ function renderAiLoading() {
         </div>`;
 }
 
+/**
+ * Renders the AI explanation using marked.js (loaded from CDN).
+ * @param {string} explanation - Markdown text returned by the AI.
+ */
 function renderAiResult(explanation) {
     const panel = document.getElementById("ai-result-panel");
     const content = document.getElementById("ai-result-content");
     panel.classList.remove("hidden");
+    // marked is loaded via CDN in index.html
     content.innerHTML = typeof marked !== "undefined"
         ? marked.parse(explanation)
         : `<pre class="whitespace-pre-wrap text-sm text-gray-300">${escapeHtml(explanation)}</pre>`;
 }
 
+/**
+ * Renders an error inside the AI result panel.
+ * @param {string} message
+ */
 function renderAiError(message) {
     const panel = document.getElementById("ai-result-panel");
     const content = document.getElementById("ai-result-content");
     panel.classList.remove("hidden");
     content.innerHTML = `<p class="text-red-400 text-sm">${escapeHtml(message)}</p>`;
 }
+

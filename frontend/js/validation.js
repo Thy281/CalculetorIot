@@ -1,12 +1,7 @@
 // ── Validation Module ────────────────────────────────────
-// Input validation rules per numeric base.
+// Input validation rules per numeric base (2-36).
 
-const BASE_RULES = {
-    2:  { pattern: /[^01]/i,    message: "Binary accepts only 0 and 1" },
-    8:  { pattern: /[^0-7]/i,   message: "Octal accepts only digits 0-7" },
-    10: { pattern: /[^0-9]/i,   message: "Decimal accepts only digits 0-9" },
-    16: { pattern: /[^0-9a-f]/i, message: "Hexadecimal accepts only 0-9 and A-F" }
-};
+const VALID_CHARS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 /**
  * Validates an input field against the selected base rules.
@@ -29,9 +24,15 @@ function validateInput(input, baseSelectId) {
         return true;
     }
 
-    const rule = BASE_RULES[base];
-    if (rule && rule.pattern.test(value)) {
-        errorEl.textContent = rule.message;
+    // Validate characters based on base
+    const allowedChars = VALID_CHARS.substring(0, base);
+    const invalidChars = value.toUpperCase().split('').filter(c => !allowedChars.includes(c));
+
+    if (invalidChars.length > 0) {
+        const invalidChar = invalidChars[0];
+        const baseName = getBaseName(base);
+        const maxDigit = getMaxDigit(base);
+        errorEl.textContent = `${baseName} accepts only digits 0-${maxDigit}`;
         errorEl.classList.remove("hidden");
         input.classList.add("border-red-500/50");
         input.classList.add("shake");
@@ -42,4 +43,26 @@ function validateInput(input, baseSelectId) {
     errorEl.classList.add("hidden");
     input.classList.remove("border-red-500/50");
     return true;
+}
+
+function getBaseName(base) {
+    const names = {
+        2: "Binary",
+        8: "Octal",
+        10: "Decimal",
+        16: "Hexadecimal"
+    };
+    return names[base] || `Base ${base}`;
+}
+
+function getMaxDigit(base) {
+    if (base <= 10) {
+        return base - 1;
+    }
+    // For bases > 10, show letters for digits >= 10
+    if (base <= 36) {
+        const maxIndex = base - 1;
+        return VALID_CHARS[maxIndex];
+    }
+    return "";
 }
