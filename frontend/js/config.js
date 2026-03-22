@@ -1,19 +1,18 @@
 // ── Config Module ─────────────────────────────────────────────────────────────
 // Change API_BASE to point to your back-end host/port.
-// Example for Spring Boot running locally on 8080:
-//   window.API_BASE = "http://127.0.0.1:8080/api/calculations";
-// Example for LAN host:
-//   window.API_BASE = "http://192.168.0.22:8080/api/calculations";
-// Example for Railway:
-//   window.API_BASE = "https://calculetoriot.up.railway.app/api/calculations";
+// Example for Docker internal:
+//   window.API_BASE = "http://calculator-iot-backend:8080/api/calculations";
+// Example for Caddy proxy:
+//   window.API_BASE = "https://iot.killdev.xyz/api/calculations";
 
-window.API_BASE = window.API_BASE || "https://calculetoriot.up.railway.app/api/calculations";
+window.API_BASE = window.API_BASE || "http://151.243.24.227:8080/api";
+
+// Cache busting - force reload on update
+// v20260322-01
 
 // Optional: HTTP(S) serial bridge for browsers/devices without Web Serial support.
 // If your frontend runs on HTTPS, the bridge must also be HTTPS:
-//   window.SERIAL_BRIDGE_URL = "https://calculetoriot.up.railway.app/serial";
-// Leave empty to disable bridge mode.
-window.SERIAL_BRIDGE_URL = window.SERIAL_BRIDGE_URL || "https://calculetoriot.up.railway.app/serial";
+window.SERIAL_BRIDGE_URL = window.SERIAL_BRIDGE_URL || "https://iot.killdev.xyz/serial";
 
 // Optional: USB filters for Web Serial (desktop).
 // Leave commented to use the default filters (Arduino, CH340, CP210x, FTDI).

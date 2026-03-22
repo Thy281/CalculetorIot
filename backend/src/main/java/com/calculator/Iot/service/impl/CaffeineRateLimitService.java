@@ -3,6 +3,7 @@ package com.calculator.Iot.service.impl;
 import com.calculator.Iot.service.RateLimitService;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -20,6 +21,7 @@ import java.util.concurrent.ConcurrentMap;
  * Use Redis para ambientes multi-instância.
  */
 @Service
+@Primary
 public class CaffeineRateLimitService implements RateLimitService {
 
     /**

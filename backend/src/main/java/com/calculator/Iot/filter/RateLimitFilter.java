@@ -155,6 +155,9 @@ public class RateLimitFilter extends OncePerRequestFilter {
      */
     private int getMaxRequestsForEndpoint(HttpServletRequest request) {
         String path = request.getServletPath();
+        if (rateLimitProperties.getEndpoints() == null) {
+            return rateLimitProperties.getMaxRequests();
+        }
         RateLimitProperties.EndpointConfig endpointConfig = rateLimitProperties.getEndpoints().get(path);
 
         if (endpointConfig != null && endpointConfig.getMaxRequests() > 0) {
@@ -162,11 +165,13 @@ public class RateLimitFilter extends OncePerRequestFilter {
         }
 
         // Também suporta pattern matching (wildcards)
-        for (String pattern : rateLimitProperties.getEndpoints().keySet()) {
-            if (pathMatcher.match(pattern, path)) {
-                RateLimitProperties.EndpointConfig config = rateLimitProperties.getEndpoints().get(pattern);
-                if (config != null && config.getMaxRequests() > 0) {
-                    return config.getMaxRequests();
+        if (rateLimitProperties.getEndpoints() != null) {
+            for (String pattern : rateLimitProperties.getEndpoints().keySet()) {
+                if (pathMatcher.match(pattern, path)) {
+                    RateLimitProperties.EndpointConfig config = rateLimitProperties.getEndpoints().get(pattern);
+                    if (config != null && config.getMaxRequests() > 0) {
+                        return config.getMaxRequests();
+                    }
                 }
             }
         }
