@@ -1,23 +1,21 @@
 // ── Ultrathink Base Converter Module ───────────────────────
 // Handles base-to-base conversion UI and logic.
 
-// Generate base options from 2 to 36
+// Generate base options (BIN, OCT, DEC, HEX only)
 function generateBaseOptions() {
+    const bases = [
+        { value: 2, label: "BIN (2)" },
+        { value: 8, label: "OCT (8)" },
+        { value: 10, label: "DEC (10)" },
+        { value: 16, label: "HEX (16)" }
+    ];
     const fragment = document.createDocumentFragment();
-    for (let base = 2; base <= 36; base++) {
+    bases.forEach(({ value, label }) => {
         const option = document.createElement("option");
-        option.value = base;
-        let label;
-        switch (base) {
-            case 2: label = "BIN (2)"; break;
-            case 8: label = "OCT (8)"; break;
-            case 10: label = "DEC (10)"; break;
-            case 16: label = "HEX (16)"; break;
-            default: label = `BASE ${base}`;
-        }
+        option.value = value;
         option.textContent = label;
         fragment.appendChild(option);
-    }
+    });
     return fragment;
 }
 
