@@ -1,11 +1,7 @@
 // ── Config Module ─────────────────────────────────────────────────────────────
-// Change API_BASE to point to your back-end host/port.
-// Example for Docker internal:
-//   window.API_BASE = "http://calculator-iot-backend:8080/api/calculations";
-// Example for Caddy proxy:
-//   window.API_BASE = "https://iot.killdev.xyz/api/calculations";
-
-window.API_BASE = window.API_BASE || "http://151.243.24.227:8080/api";
+// Docker: uses nginx proxy (/api/ → backend:8080)
+// Local dev: use explicit URL
+window.API_BASE = window.API_BASE || "/api";
 
 // Cache busting - force reload on update
 // v20260322-01

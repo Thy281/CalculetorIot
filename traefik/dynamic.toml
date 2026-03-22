@@ -1,0 +1,24 @@
+[http]
+  [http.routers]
+    [http.routers.frontend]
+      rule = "Host(`iot.killdev.xyz`)"
+      service = "frontend"
+      entryPoints = ["websecure"]
+      [http.routers.frontend.tls]
+        certResolver = "letsencrypt"
+
+    [http.routers.api]
+      rule = "Host(`iot.killdev.xyz`) && PathPrefix(`/api`)"
+      service = "backend"
+      entryPoints = ["websecure"]
+      [http.routers.api.tls]
+        certResolver = "letsencrypt"
+
+  [http.services]
+    [http.services.frontend.loadBalancer]
+      [[http.services.frontend.loadBalancer.servers]]
+        url = "http://frontend:80"
+
+    [http.services.backend.loadBalancer]
+      [[http.services.backend.loadBalancer.servers]]
+        url = "http://backend:8080"
