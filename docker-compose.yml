@@ -1,20 +1,4 @@
 services:
-  traefik:
-    image: traefik:v3
-    container_name: traefik
-    command:
-      - "--configFile=/etc/traefik/traefik.toml"
-    ports:
-      - "80:80"
-      - "443:443"
-    volumes:
-      - ./traefik/traefik.toml:/etc/traefik/traefik.toml:ro
-      - ./traefik/dynamic.toml:/etc/traefik/dynamic.toml:ro
-      - traefik-acme:/letsencrypt
-    networks:
-      - app-network
-    restart: unless-stopped
-
   postgres:
     image: postgres:16-alpine
     container_name: postgres
@@ -50,6 +34,8 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: backend
+    ports:
+      - "8080:8080"
     environment:
       SPRING_JPA_HIBERNATE_DDL_AUTO: update
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/calculator_iot
@@ -72,6 +58,8 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     container_name: frontend
+    ports:
+      - "80:80"
     depends_on:
       - backend
     networks:
@@ -84,4 +72,4 @@ networks:
 
 volumes:
   postgres_data:
-  traefik-acme:
+
