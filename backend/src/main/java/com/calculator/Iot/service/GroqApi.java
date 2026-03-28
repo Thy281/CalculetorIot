@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClientException;
 
@@ -50,11 +51,14 @@ public class GroqApi {
     private final RestClient restClient;
 
     public GroqApi() {
+        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
+        requestFactory.setConnectTimeout((int) TIMEOUT.toMillis());
+        requestFactory.setReadTimeout((int) TIMEOUT.toMillis());
+        
         this.restClient = RestClient.builder()
-                .defaultUri(GROQ_URL)
+                .baseUrl(GROQ_URL)
+                .requestFactory(requestFactory)
                 .defaultHeader("Content-Type", MediaType.APPLICATION_JSON_VALUE)
-                .connectTimeout(TIMEOUT)
-                .readTimeout(TIMEOUT)
                 .build();
     }
 
