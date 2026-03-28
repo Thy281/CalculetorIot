@@ -47,7 +47,6 @@ class CalculatorServiceTest {
     @Test
     @DisplayName("Binary + Decimal → should return correct decimal sum")
     void calculate_binaryPlusDecimal_returnsDecimalResult() {
-        // 1010 (binary) = 10 | 5 (decimal) = 5 → 10 + 5 = 15
         CalculationRequest request = new CalculationRequest("1010", 2, "5", 10, "+");
         savedCalculation.setResult(15L);
         when(calculationRepository.save(any(Calculation.class))).thenReturn(savedCalculation);
