@@ -56,6 +56,9 @@ public class CalculationController {
      */
     @PostMapping("/ai")
     public ResponseEntity<AiCalculationResponse> aiCalculate(@RequestBody AiCalculationRequest request) {
+        if (request.question() == null || request.question().isBlank()) {
+            return ResponseEntity.badRequest().body(new AiCalculationResponse(null, "Error: 'question' field is required and cannot be empty"));
+        }
         String explanation = groqApi.ask(request.question());
         return ResponseEntity.ok(new AiCalculationResponse(request.question(), explanation));
     }
