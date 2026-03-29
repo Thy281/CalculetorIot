@@ -21,7 +21,7 @@ public class GroqApi {
 
     private static final Logger logger = LoggerFactory.getLogger(GroqApi.class);
     private static final String GROQ_URL = "https://api.groq.com/openai/v1/chat/completions";
-    private static final String MODEL = "llama-3.1-70b-versatile";
+    private static final String MODEL = "llama-3.1-8b-instant";
     private static final Duration TIMEOUT = Duration.ofSeconds(30);
 
     private static final String SYSTEM_PROMPT = """
