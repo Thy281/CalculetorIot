@@ -5,7 +5,7 @@
 // Example for Caddy proxy:
 //   window.API_BASE = "https://iot.killdev.xyz/api/calculations";
 
-window.API_BASE = window.API_BASE || "http://151.243.24.227:8080/api";
+window.API_BASE = window.API_BASE || "https://iot.killdev.xyz/api";
 
 // Cache busting - force reload on update
 // v20260322-01
