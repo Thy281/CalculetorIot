@@ -1,3 +1,4 @@
+# Config para o aDeploy
 services:
   postgres:
     image: postgres:16-alpine
@@ -10,7 +11,7 @@ services:
       - postgres_data:/var/lib/postgresql/data
     networks:
       - app-network
-    restart: unless-stopped
+    # restart: unless-stopped
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -22,7 +23,7 @@ services:
     container_name: redis
     networks:
       - app-network
-    restart: unless-stopped
+    # restart: unless-stopped
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -52,7 +53,7 @@ services:
         condition: service_healthy
     networks:
       - app-network
-    restart: unless-stopped
+    # restart: unless-stopped
 
 networks:
   app-network:
